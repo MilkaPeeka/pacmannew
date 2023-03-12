@@ -1,6 +1,7 @@
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -116,13 +117,26 @@ public class Entity {
         this.currDir = dir;
     }
 
-    public void setDirForCollision(int[] notAllowedToGoInDirection) {
+    public boolean setDirForCollision(ArrayList<Integer> notAllowedToGoInDirection) {
         int[] dir;
-        while (true){
+        while (true) {
             dir = directionQueue.poll();
-            if (dir != null && !Arrays.equals(notAllowedToGoInDirection, dir)){
-                currDir = dir;
-                break;
+            if (dir != null) {
+                boolean isNotAllowed = false;
+                for (int i = 0; i < notAllowedToGoInDirection.size(); i++) {
+                    int blockedDirection = notAllowedToGoInDirection.get(i);
+                    if (dir[0] == DIRECTION_VECTORS[blockedDirection][0] &&
+                            dir[1] == DIRECTION_VECTORS[blockedDirection][1]) {
+                        isNotAllowed = true;
+                        break;
+                    }
+                }
+                if (!isNotAllowed) {
+                    currDir = dir;
+                    return true;
+                }
+                else
+                    return false;
             }
 
             try {

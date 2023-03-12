@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class MultiplayerServer extends Multiplayer{
+public class MultiplayerServer extends Multiplayer implements ServerCommands{
     private String serverIP;
     private int serverPort;
     private HashMap<MultiplayerConnection, Byte> connectionsAndChoices;
@@ -51,6 +51,7 @@ public class MultiplayerServer extends Multiplayer{
 
         }
     }
+
 
     private byte[] choices(){
         if (ownChoice == NONE && connectionsAndChoices.isEmpty()) {
@@ -184,6 +185,31 @@ public class MultiplayerServer extends Multiplayer{
             System.out.println("EXCEPTION: " +e.getMessage());
             return;
         }
+
+    }
+
+    @Override
+    public void UpdateEntityDeath() {
+
+    }
+
+    @Override
+    public void onEntityDeath() {
+
+    }
+
+    @Override
+    public void UpdateChangeDir() {
+
+    }
+
+    @Override
+    public void onChangeDir() {
+
+    }
+
+    @Override
+    public void updateSelected() {
 
     }
 

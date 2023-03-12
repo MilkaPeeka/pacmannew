@@ -9,6 +9,7 @@ https://carminati.altervista.org/PROJECTS/PYTHON3/PACMAN/pacman.html
 
  */
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 class Map {
@@ -82,90 +83,85 @@ class Map {
     }
 
     // returns a vector of which the collision is going to happen
-    public int[] wallCollision(Entity entity) {
+    public ArrayList<Integer> wallCollisionBlocked(Entity entity) {
+        ArrayList<Integer> blockedDirs = new ArrayList<Integer>();
         int block;
         int[] entityDir = entity.getDir();
+        int entityX = entity.getX();
+        int entityY = entity.getY();
+
         if (entityDir[0] == 1){
             // right
-             block = map[entity.getY()][entity.getX() + 1];
-             if (!(block == 2 || block == -2 || block == 3))
-                 return Entity.DIRECTION_VECTORS[Entity.RIGHT];
+            block = map[entityY][entityX + 1];
+            if (!(block == 2 || block == -2 || block == 3))
+                blockedDirs.add(Entity.RIGHT);
         }
         if (entityDir[0] == -1){
             // left
-            block = map[entity.getY()][entity.getX()];
+            block = map[entityY][entityX];
             if (!(block == 2 || block == -2 || block == 3))
-                return Entity.DIRECTION_VECTORS[Entity.LEFT];
+                blockedDirs.add(Entity.LEFT);
         }
 
         if (entityDir[1] == 1){
             // down
-            block = map[entity.getY() + 1][entity.getX()];
+            block = map[entityY + 1][entityX];
             if (!(block == 2 || block == -2 || block == 3))
-                return Entity.DIRECTION_VECTORS[Entity.DOWN];
+                blockedDirs.add(Entity.DOWN);
         }
-
 
         if (entityDir[1] == -1){
             // up
-            block = map[entity.getY()][entity.getX()];
+            block = map[entityY][entityX];
             if (!(block == 2 || block == -2 || block == 3))
-                return Entity.DIRECTION_VECTORS[Entity.UP];
+                blockedDirs.add(Entity.UP);
         }
 
-        return null;
-
+        return blockedDirs;
     }
 
-    public int[] atIntersection(Entity entity) {
-        int block;
+
+    public ArrayList<Integer> atIntersectionAvailable(Entity entity) {
+        ArrayList<Integer> blockedDirections = new ArrayList<>();
+        int x = entity.getX();
+        int y = entity.getY();
         int[] entityDir = entity.getDir();
 
         if (entityDir[0] == 1) {
-            block = map[entity.getY() + 1][entity.getX()];
+            int block = map[y + 1][x];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.DOWN];
+                blockedDirections.add(Entity.DOWN);
 
-            block = map[entity.getY() - 1][entity.getX()];
+            block = map[y - 1][x];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.UP];
-
-            return null;
-
+                blockedDirections.add(Entity.UP);
         } else if (entityDir[0] == -1) {
-            block = map[entity.getY() + 1][entity.getX() + 1];
+            int block = map[y + 1][x + 1];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.DOWN];
+                blockedDirections.add(Entity.DOWN);
 
-            block = map[entity.getY() - 1][entity.getX() + 1];
+            block = map[y - 1][x + 1];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.UP];
-
-            return null;
-
+                blockedDirections.add(Entity.UP);
         } else if (entityDir[1] == 1) {
-            block = map[entity.getY()][entity.getX() + 1];
+            int block = map[y][x + 1];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.LEFT];
+                blockedDirections.add(Entity.LEFT);
 
-            block = map[entity.getY()][entity.getX() - 1];
+            block = map[y][x - 1];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.RIGHT];
-
-            return null;
+                blockedDirections.add(Entity.RIGHT);
         } else if (entityDir[1] == -1) {
-            block = map[entity.getY() + 1][entity.getX() + 1];
+            int block = map[y + 1][x + 1];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.LEFT];
+                blockedDirections.add(Entity.LEFT);
 
-            block = map[entity.getY() + 1][entity.getX() - 1];
+            block = map[y + 1][x - 1];
             if (!(block == 0 || block == 1 || block == 4))
-                return Entity.DIRECTION_VECTORS[Entity.RIGHT];
-
-            return null;
+                blockedDirections.add(Entity.RIGHT);
         }
 
-        return null;
+        return blockedDirections;
     }
 
     public boolean eatPoint(Pacman p, Ghost[] ghosts){

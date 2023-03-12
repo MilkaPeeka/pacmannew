@@ -3,18 +3,23 @@ import java.net.*;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-public class MultiplayerClient extends Multiplayer {
+public class MultiplayerClient extends Multiplayer implements ServerCommands{
     private static final Logger LOGGER = Logger.getLogger(MultiplayerClient.class.getName());
     int serverPort;
     private String serverIP;
     private byte selected;
+    private ManagerGame gm;
 
     public MultiplayerClient(String ip, int port, PanelLobby panelLobby) {
         super(panelLobby);
         this.serverIP = ip;
         this.serverPort = port;
+        this.gm = null;
     }
 
+    public void setGameManager(ManagerGame gm){
+        this.gm = gm;
+    }
 
     public byte[] handleMessage(DatagramPacket incomingPacket) {
         byte[] message = incomingPacket.getData();
@@ -100,6 +105,8 @@ public class MultiplayerClient extends Multiplayer {
             }
         }
 
+        // stopServer();
+
     }
 
 
@@ -121,4 +128,35 @@ public class MultiplayerClient extends Multiplayer {
     }
 
 
+    @Override
+    public void UpdateEntityDeath() {
+        // activated when we recieve a death message
+
+    }
+
+    @Override
+    public void onEntityDeath() {
+        // send to server that entity died and than the server will handle it
+
+    }
+
+    @Override
+    public void UpdateChangeDir() {
+        // send to message that we changed dir
+    }
+
+    @Override
+    public void onChangeDir() {
+        // when we recieve a change dir from server
+    }
+
+    @Override
+    public void updateSelected() {
+
+    }
+
+    @Override
+    public void stopServer() {
+        this.socket.close();
+    }
 }

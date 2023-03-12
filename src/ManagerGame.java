@@ -275,6 +275,8 @@ public class ManagerGame {
     }
 
 
+
+
     public double getAlteredGhostSpeed() {
         return alteredGhostSpeed;
     }

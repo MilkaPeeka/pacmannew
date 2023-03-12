@@ -20,7 +20,8 @@ public class Multiplayer extends Thread {
     public static final byte SELECTENTITY = 3;
     public static final byte SELECTENTITIES = 4;
     public static final byte DESELECTENTITY = 5;
-
+    public static final byte UPDATEDIRECTION = 6;
+    public static final byte ENTITYDEATH = 7;
     public static final byte NONE = -1;
 
     public static final byte PACMAN = 1;
@@ -60,24 +61,42 @@ public class Multiplayer extends Thread {
         }
         return NONE;
     }
-//    static String trimZeros(String str) {
-//        int pos = str.indexOf(0);
-//        return pos == -1 ? str : str.substring(0, pos);
-//    }
+    public static String byteToString(byte chosen) {
+        switch (chosen){
+            case PACMAN -> {
+                return "Pacman";
+            }
+            case CLYDE -> {
+                return "Clyde";
+            }
+            case INKY -> {
+                return "Inky";
+            }
 
-    static byte[] connectMessage() {
+            case PINKY -> {
+                return "Pinky";
+            }
+
+            case BINKY -> {
+                return "Blinky";
+            }
+        }
+        return null;
+    }
+
+    public static byte[] connectMessage() {
         return new byte[]{CONNECT};
     }
 
-    static byte[] chooseEntityMessage(byte choice) {
+    public static byte[] chooseEntityMessage(byte choice) {
         return new byte[]{SELECTENTITY, choice};
     }
 
-    static byte getEntityFromMessage(byte[] msg) {
+    public static byte getEntityFromMessage(byte[] msg) {
         return msg[1];
     }
 
-    static byte[] sendAllChosenMessage(byte[] chosen) {
+    public static byte[] sendAllChosenMessage(byte[] chosen) {
         if (chosen == null)
             return new byte[]{SELECTENTITIES};
 
@@ -89,7 +108,7 @@ public class Multiplayer extends Thread {
         return chosenMessage;
     }
 
-    static byte[] receiveAllChosenMessage(byte[] message) {
+    public static byte[] receiveAllChosenMessage(byte[] message) {
         if (message.length - 1 == 0)
             return new byte[]{};
 
@@ -101,36 +120,20 @@ public class Multiplayer extends Thread {
 
     }
 
-
-    static byte[] deselectEntityMessage(byte chosen) {
+    public static byte[] deselectEntityMessage(byte chosen) {
         return new byte[]{DESELECTENTITY, chosen};
     }
 
-    static byte getDeselectedEntity(byte[] msg) {
+    public static byte getDeselectedEntity(byte[] msg) {
         return msg[1];
     }
 
-
-    protected static String byteToString(byte chosen) {
-        switch (chosen){
-            case PACMAN -> {
-                return "Pacman";
-        }
-            case CLYDE -> {
-                return "Clyde";
-        }
-            case INKY -> {
-                return "Inky";
-        }
-
-            case PINKY -> {
-                return "Pinky";
-        }
-
-            case BINKY -> {
-                return "Blinky";
-        }
+    public static byte[] updateDirectionMessage(int[] directionVector){
+        return new byte[]{UPDATEDIRECTION, (byte) directionVector[0], (byte) directionVector[1]};
     }
-        return null;
+
+    public static byte[] DeathMessage(byte deadEntity){
+        return new byte[]{ENTITYDEATH, deadEntity};
     }
+
 }
